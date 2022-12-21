@@ -90,15 +90,6 @@
             <artifactId>cloud-bukkit</artifactId>
             <version>1.8.0</version>
         </dependency>
-        <!--
-        ~    Optional: Allows you to use annotated methods
-        ~    to declare commands
-        -->
-        <dependency>
-            <groupId>cloud.commandframework</groupId>
-            <artifactId>cloud-annotations</artifactId>
-            <version>1.8.0</version>
-        </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
