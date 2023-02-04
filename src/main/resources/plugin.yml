@@ -1,6 +1,6 @@
 name: SomethingRising
 version: '${project.version}'
-main: me.praenyth.plugins.somethingrising.SomethingRising
+main: inc.silly.saucers.plugins.somethingrising.SomethingRising
 api-version: 1.19
 prefix: SomethingRising
 authors: [ Prae ]
