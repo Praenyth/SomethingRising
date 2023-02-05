@@ -6,6 +6,7 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -14,13 +15,17 @@ public class StarterPeriodRunnable extends BukkitRunnable {
 
     Plugin plugin;
 
-    public StarterPeriodRunnable(Plugin plugin, int time) {
+    private boolean runOnce = false;
+
+    public StarterPeriodRunnable(Plugin plugin) {
         this.plugin = plugin;
-        this.timeLeft = time;
     }
 
-    private int timeLeft;
-    public void startFromStarter(Plugin plugin) {
+    private int timeLeft = 1200;
+    private World world;
+    private double worldBorderRadius = 500;
+    public void startFromStarter(Plugin plugin, World world) {
+        this.world = world;
         this.runTaskTimer(plugin, 0, 20);
     }
 
@@ -28,8 +33,20 @@ public class StarterPeriodRunnable extends BukkitRunnable {
         timeLeft = seconds;
     }
 
+    public void setWorldBorderRadius(double radius) {
+        worldBorderRadius = radius;
+    }
+
     @Override
     public void run() {
+
+        if (!runOnce) {
+
+            world.getWorldBorder().setSize(worldBorderRadius);
+            runOnce = true;
+
+        }
+
         timeLeft--;
         for (Player pl:
                 Bukkit.getOnlinePlayers()) {

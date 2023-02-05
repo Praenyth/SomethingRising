@@ -1,8 +1,11 @@
 package inc.silly.saucers.plugins.somethingrising.commands;
 
 import cloud.commandframework.CommandManager;
+import cloud.commandframework.arguments.standard.DoubleArgument;
 import cloud.commandframework.arguments.standard.IntegerArgument;
 import cloud.commandframework.bukkit.BukkitCommandManager;
+import cloud.commandframework.bukkit.parsers.BlockPredicateArgument;
+import cloud.commandframework.bukkit.parsers.MaterialArgument;
 import cloud.commandframework.bukkit.parsers.PlayerArgument;
 import cloud.commandframework.execution.CommandExecutionCoordinator;
 import inc.silly.saucers.plugins.somethingrising.GamePeriod;
@@ -31,28 +34,31 @@ public class RisingCommand {
             manager.command(
                     RisingUtils.generateCommand(manager, "start")
                             .handler(context -> {
-                                switch (SomethingRising.CURRENT_STATUS) {
-                                    case ACTIVE:
-                                    case BORDER:
-                                    case STARTER:
-                                        context.getSender().sendMessage(ChatColor.RED+"There is a game currently going on.");
-                                        break;
-                                    case ENDED:
-                                        context.getSender().sendMessage(ChatColor.RED+"Please restart your server before starting another game.");
-                                        break;
-                                    case LOBBY:
-                                        SomethingRising.CURRENT_STATUS = GamePeriod.STARTER;
-                                        SomethingRising.STARTER_PRE_EVENT.startFromStarter(plugin);
-                                        for (Player pl : Bukkit.getOnlinePlayers()) {
-                                            if (context.getSender() instanceof Player) {
-                                                if (pl.hasPermission("something.rising.admin") && !pl.getName().equals(context.getSender().getName())) {
-                                                    pl.sendMessage(ChatColor.GRAY+"["+ context.getSender().getName()+": Started the minigame.]");
+                                if (context.getSender() instanceof Player) {
+                                    switch (SomethingRising.CURRENT_STATUS) {
+                                        case ACTIVE:
+                                        case BORDER:
+                                        case STARTER:
+                                            context.getSender().sendMessage(ChatColor.RED+"There is a game currently going on.");
+                                            break;
+                                        case ENDED:
+                                            context.getSender().sendMessage(ChatColor.RED+"Please restart your server before starting another game.");
+                                            break;
+                                        case LOBBY:
+                                            SomethingRising.CURRENT_STATUS = GamePeriod.STARTER;
+                                            SomethingRising.STARTER_PRE_EVENT.startFromStarter(plugin, ((Player) context.getSender()).getWorld());
+                                            for (Player pl : Bukkit.getOnlinePlayers()) {
+                                                if (context.getSender() instanceof Player) {
+                                                    if (pl.hasPermission("something.rising.admin") && !pl.getName().equals(context.getSender().getName())) {
+                                                        pl.sendMessage(ChatColor.ITALIC+""+ChatColor.GRAY+"["+ context.getSender().getName()+": Started the minigame.]");
+                                                    }
                                                 }
+                                                SomethingRising.alivePlayers.add(pl.getUniqueId());
+                                                pl.sendMessage(ChatColor.GREEN + "The starter period has begun!");
+                                                pl.playSound(pl.getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1, 1);
                                             }
-                                            SomethingRising.alivePlayers.add(pl.getUniqueId());
-                                            pl.sendMessage(ChatColor.GREEN + "The starter period has begun!");
-                                        }
-                                        break;
+                                            break;
+                                    }
                                 }
 
                             }
@@ -60,15 +66,68 @@ public class RisingCommand {
             );
 
             manager.command(
+                    RisingUtils.generateCommand(manager, "setstarterborderradius")
+                            .argument(DoubleArgument.builder("borderradius"))
+                            .handler(
+                                    context -> {
+                                        switch (SomethingRising.CURRENT_STATUS) {
+                                            case LOBBY:
+                                                for (Player pl: Bukkit.getOnlinePlayers()) {
+                                                    if (context.getSender() instanceof Player) {
+                                                        if (pl.hasPermission("something.rising.admin") && !pl.getName().equals(context.getSender().getName())) {
+                                                            pl.sendMessage(ChatColor.ITALIC+""+ChatColor.GRAY+"["+ context.getSender().getName()+": Set starter border to: "+ context.get("borderradius") +".]");
+                                                        }
+                                                    }
+                                                }
+                                                SomethingRising.STARTER_PRE_EVENT.setWorldBorderRadius(context.get("borderradius"));
+                                                context.getSender().sendMessage(ChatColor.GREEN+"The starter border is now: "+context.get("borderradius")+"!");
+                                                break;
+                                            case ENDED:
+                                            case ACTIVE:
+                                            case BORDER:
+                                            case STARTER:
+                                                context.getSender().sendMessage(ChatColor.RED+"You can't change that now!");
+                                                break;
+                                        }
+                                    }
+                            )
+            );
+
+            manager.command(
+                    RisingUtils.generateCommand(manager, "setblock")
+                            .argument(MaterialArgument.builder("block"))
+                            .handler(context -> {
+                                switch (SomethingRising.CURRENT_STATUS) {
+                                    case LOBBY:
+                                        for (Player pl: Bukkit.getOnlinePlayers()) {
+                                            if (context.getSender() instanceof Player) {
+                                                if (pl.hasPermission("something.rising.admin") && !pl.getName().equals(context.getSender().getName())) {
+                                                    pl.sendMessage(ChatColor.ITALIC+""+ChatColor.GRAY+"["+ context.getSender().getName()+": Set block to "+ context.get("block") +".]");
+                                                }
+                                            }
+                                        }
+                                        SomethingRising.GAME.setBlock(context.get("block"));
+                                        context.getSender().sendMessage(ChatColor.GREEN+"The block used in the block rising is now: "+context.get("block")+"!");
+                                        break;
+                                    case ENDED:
+                                    case ACTIVE:
+                                    case BORDER:
+                                    case STARTER:
+                                        context.getSender().sendMessage(ChatColor.RED+"You can't change that now!");
+                                        break;
+                                }
+                            })
+            );
+
+            manager.command(
                     RisingUtils.generateCommand(manager, "setticksperrise")
-                            .permission("something.rising.admin")
                             .argument(IntegerArgument.builder("time"))
                             .handler(context -> {
                                 if (!(((int)context.get("time")) < 1 && ((int)context.get("time")) > 1200)) {
                                     for (Player pl: Bukkit.getOnlinePlayers()) {
                                         if (context.getSender() instanceof Player) {
                                             if (pl.hasPermission("something.rising.admin") && !pl.getName().equals(context.getSender().getName())) {
-                                                pl.sendMessage(ChatColor.GRAY+"["+ context.getSender().getName()+": Set lava rise ticks to "+ context.get("time") +".]");
+                                                pl.sendMessage(ChatColor.ITALIC+""+ChatColor.GRAY+"["+ context.getSender().getName()+": Set lava rise ticks to "+ context.get("time") +".]");
                                             }
                                         }
                                     }
@@ -90,7 +149,7 @@ public class RisingCommand {
                                         for (Player pl: Bukkit.getOnlinePlayers()) {
                                             if (context.getSender() instanceof Player) {
                                                 if (pl.hasPermission("something.rising.admin") && !pl.getName().equals(context.getSender().getName())) {
-                                                    pl.sendMessage(ChatColor.GRAY+"["+ context.getSender().getName()+": Set border close seconds to "+ context.get("closeSeconds") +".]");
+                                                    pl.sendMessage(ChatColor.ITALIC+""+ChatColor.GRAY+"["+ context.getSender().getName()+": Set border close seconds to "+ context.get("closeSeconds") +".]");
                                                 }
                                             }
                                         }
@@ -117,7 +176,7 @@ public class RisingCommand {
                                         for (Player pl: Bukkit.getOnlinePlayers()) {
                                             if (context.getSender() instanceof Player) {
                                                 if (pl.hasPermission("something.rising.admin") && !pl.getName().equals(context.getSender().getName())) {
-                                                    pl.sendMessage(ChatColor.GRAY+"["+ context.getSender().getName()+": Set the amount of time in the starter period to "+ context.get("starterseconds") +".]");
+                                                    pl.sendMessage(ChatColor.ITALIC+""+ChatColor.GRAY+"["+ context.getSender().getName()+": Set the amount of time in the starter period to "+ context.get("starterseconds") +".]");
                                                 }
                                             }
                                         }
@@ -155,15 +214,19 @@ public class RisingCommand {
                                                     for (Player pl: Bukkit.getOnlinePlayers()) {
                                                         if (context.getSender() instanceof Player) {
                                                             if (pl.hasPermission("something.rising.admin") && !pl.getName().equals(context.getSender().getName())) {
-                                                                pl.sendMessage(ChatColor.GRAY+"["+ context.getSender().getName()+": Revived "+revivedPlayer.getName()+".]");
+                                                                pl.sendMessage(ChatColor.ITALIC+""+ChatColor.GRAY+"["+ context.getSender().getName()+": Revived "+revivedPlayer.getName()+".]");
                                                             }
                                                         }
                                                     }
 
-                                                    Location newLocation = revivedPlayer.getLastDeathLocation().add(0, 10, 0);
+                                                    try {
+                                                        Location newLocation = revivedPlayer.getLastDeathLocation().add(0, 10, 0);
 
-                                                    revivedPlayer.getWorld().getBlockAt(newLocation.clone().add(0, -1,0)).setType(Material.GLASS, true);
-                                                    revivedPlayer.teleport(newLocation);
+                                                        revivedPlayer.getWorld().getBlockAt(newLocation.clone().add(0, -1,0)).setType(Material.GLASS, true);
+                                                        revivedPlayer.teleport(newLocation);
+                                                    } catch (NullPointerException ignored) {
+                                                    }
+
                                                     revivedPlayer.setGameMode(GameMode.SURVIVAL);
 
                                                     SomethingRising.alivePlayers.add(revivedPlayer.getUniqueId());

@@ -1,9 +1,11 @@
 package inc.silly.saucers.plugins.somethingrising.listeners;
 
+import inc.silly.saucers.plugins.somethingrising.GamePeriod;
 import inc.silly.saucers.plugins.somethingrising.SomethingRising;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -34,6 +36,9 @@ public class PlayerElimination implements Listener {
                         for (Player pl:
                              Bukkit.getOnlinePlayers()) {
                             pl.sendTitle(ChatColor.GREEN+winner.getName()+" has won!","",10,70,20);
+                            pl.playSound(pl.getLocation(), Sound.ENTITY_ALLAY_DEATH, 1, 1);
+                            pl.setGameMode(GameMode.SPECTATOR);
+                            SomethingRising.CURRENT_STATUS = GamePeriod.ENDED;
                         }
 
                     } else {
@@ -65,6 +70,7 @@ public class PlayerElimination implements Listener {
                 case ENDED:
                 case LOBBY:
                     event.setCancelled(true);
+                    break;
 
             }
 

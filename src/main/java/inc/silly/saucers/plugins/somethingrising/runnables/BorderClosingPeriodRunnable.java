@@ -46,7 +46,7 @@ public class BorderClosingPeriodRunnable extends BukkitRunnable {
         borderClosingSeconds--;
         for (Player pl:
                 Bukkit.getOnlinePlayers()) {
-            pl.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN+ RisingUtils.displayTimer(borderClosingSeconds)));
+            pl.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.RED+ RisingUtils.displayTimer(borderClosingSeconds)));
         }
         if (borderClosingSeconds <= 0) {
             SomethingRising.GAME.startLavaRise();

@@ -26,7 +26,7 @@ public final class SomethingRising extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new PlayerElimination(), this);
         GAME = new BlockRisingRunnable(this, getServer().getWorlds().get(0), 20);
-        STARTER_PRE_EVENT = new StarterPeriodRunnable(this,6000);
+        STARTER_PRE_EVENT = new StarterPeriodRunnable(this);
         BORDER_PRE_EVENT = new BorderClosingPeriodRunnable(getServer().getWorlds().get(0));
         RisingCommand.init(this);
 

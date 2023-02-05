@@ -30,6 +30,8 @@ public class BlockRisingRunnable extends BukkitRunnable {
     private int ticksPerRise;
     public static int originalTicks;
 
+    private Material block = Material.LAVA;
+
 
     public static void resetyLevel() {
         Y_LEVEL = -64;
@@ -41,6 +43,10 @@ public class BlockRisingRunnable extends BukkitRunnable {
 
     public void setTicksPerRise(int ticks) {
         originalTicks = ticks;
+    }
+
+    public void setBlock(Material material) {
+        block = material;
     }
 
     public void startLavaRise() {
@@ -60,6 +66,10 @@ public class BlockRisingRunnable extends BukkitRunnable {
             runOnce = true;
         }
 
+        if (SomethingRising.CURRENT_STATUS == GamePeriod.ENDED) {
+            cancel();
+        }
+
         ticksPerRise--;
         if (ticksPerRise <= 0) {
             ticksPerRise = originalTicks;
@@ -68,7 +78,7 @@ public class BlockRisingRunnable extends BukkitRunnable {
             } else {
                 for (int x = -50; x < 50; x++) {
                     for (int z = -50; z < 50; z++) {
-                        world.getBlockAt(x, Y_LEVEL, z).setType(Material.LAVA, false);
+                        world.getBlockAt(x, Y_LEVEL, z).setType(block, false);
                     }
                 }
                 Y_LEVEL++;
