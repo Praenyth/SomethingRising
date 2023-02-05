@@ -279,12 +279,11 @@ public class RisingCommand {
                                                         }
                                                     }
 
-                                                    try {
-                                                        Location newLocation = revivedPlayer.getLastDeathLocation().add(0, 10, 0);
+                                                    if (context.getSender() instanceof Player) {
 
-                                                        revivedPlayer.getWorld().getBlockAt(newLocation.clone().add(0, -1,0)).setType(Material.GLASS, true);
-                                                        revivedPlayer.teleport(newLocation);
-                                                    } catch (NullPointerException ignored) {
+                                                        Player teleportTo = (Player) context.getSender();
+                                                        revivedPlayer.teleport(teleportTo);
+
                                                     }
 
                                                     revivedPlayer.setGameMode(GameMode.SURVIVAL);
