@@ -1,16 +1,13 @@
 package inc.silly.saucers.plugins.somethingrising.runnables;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class LavaRising extends BukkitRunnable {
+public class BlockRisingRunnable extends BukkitRunnable {
 
-    public LavaRising(Plugin plugin, World world, int ticks) {
+    public BlockRisingRunnable(Plugin plugin, World world, int ticks) {
         this.plugin = plugin;
         this.world = world;
         this.ticksPerRise = ticks;
@@ -43,6 +40,7 @@ public class LavaRising extends BukkitRunnable {
 
     @Override
     public void run() {
+
         ticksPerRise--;
         if (ticksPerRise <= 0) {
             ticksPerRise = originalTicks;

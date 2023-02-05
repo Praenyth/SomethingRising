@@ -49,11 +49,11 @@
                     <relocations>
                         <relocation>
                             <pattern>cloud.commandframework</pattern>
-                            <shadedPattern>me.praenyth.plugins.shaded.cloud</shadedPattern> <!-- Replace this -->
+                            <shadedPattern>inc.silly.saucers.plugins.shaded.cloud</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>io.leangen.geantyref</pattern>
-                            <shadedPattern>me.praenyth.plugins.shaded.typetoken</shadedPattern> <!-- Replace this -->
+                            <shadedPattern>inc.silly.saucers.plugins.shaded.typetoken</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
