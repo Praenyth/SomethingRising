@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerElimination implements Listener {
 
@@ -75,6 +76,45 @@ public class PlayerElimination implements Listener {
             }
 
         }
+    }
+
+    @EventHandler
+    public void onPlayerLeave(PlayerQuitEvent event) {
+
+        Player player = event.getPlayer();
+
+        switch (SomethingRising.CURRENT_STATUS) {
+
+            case STARTER:
+            case BORDER:
+            case ACTIVE:
+                if (SomethingRising.alivePlayers.contains(player.getUniqueId())) {
+
+                    SomethingRising.alivePlayers.remove(player.getUniqueId());
+
+                    for (Player pl :
+                            Bukkit.getOnlinePlayers()) {
+
+                        pl.sendMessage(ChatColor.RED+player.getName()+" has left!");
+
+                    }
+
+                    if (SomethingRising.alivePlayers.size() == 1) {
+
+                        Player winner = Bukkit.getPlayer(SomethingRising.alivePlayers.get(0));
+
+                        for (Player pl :
+                                Bukkit.getOnlinePlayers()) {
+                            pl.sendTitle(ChatColor.GREEN + winner.getName() + " has won!", "", 10, 70, 20);
+                            pl.playSound(pl.getLocation(), Sound.ENTITY_ALLAY_DEATH, 1, 1);
+                            pl.setGameMode(GameMode.SPECTATOR);
+                            SomethingRising.CURRENT_STATUS = GamePeriod.ENDED;
+                        }
+
+                    }
+                }
+        }
+
     }
 
 }

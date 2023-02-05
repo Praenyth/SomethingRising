@@ -32,12 +32,16 @@ public class BlockRisingRunnable extends BukkitRunnable {
 
     private Material block = Material.LAVA;
 
+    private int finalBorderTime = 300;
+
+    public int lavaHeight = 318;
+
 
     public static void resetyLevel() {
         Y_LEVEL = -64;
     }
 
-    public static void setyLevel(int yLevel) {
+    public void setyLevel(int yLevel) {
         Y_LEVEL = yLevel;
     }
 
@@ -49,6 +53,14 @@ public class BlockRisingRunnable extends BukkitRunnable {
         block = material;
     }
 
+    public void setFinalBorderTime(int seconds) {
+        finalBorderTime = seconds;
+    }
+
+    public void setLavaHeightLimit(int heightLimit) {
+        lavaHeight = heightLimit;
+    }
+
     public void startLavaRise() {
         this.runTaskTimer(plugin, 0, 1);
     }
@@ -57,7 +69,7 @@ public class BlockRisingRunnable extends BukkitRunnable {
     public void run() {
 
         if (!runOnce) {
-            world.getWorldBorder().setSize(20, TimeUnit.SECONDS, 60);
+            world.getWorldBorder().setSize(20, TimeUnit.SECONDS, finalBorderTime);
             for (Player pl:
                     Bukkit.getOnlinePlayers()) {
                 pl.sendMessage(ChatColor.YELLOW+"Lava will now rise. If you die beyond this point, you're eliminated. "+ChatColor.LIGHT_PURPLE+"Good luck :3");
@@ -73,7 +85,7 @@ public class BlockRisingRunnable extends BukkitRunnable {
         ticksPerRise--;
         if (ticksPerRise <= 0) {
             ticksPerRise = originalTicks;
-            if (Y_LEVEL > 318) {
+            if (Y_LEVEL > lavaHeight) {
                 cancel();
             } else {
                 for (int x = -50; x < 50; x++) {

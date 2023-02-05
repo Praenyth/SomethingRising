@@ -14,6 +14,7 @@ import inc.silly.saucers.plugins.somethingrising.SomethingRising;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.function.Function;
 
@@ -54,6 +55,8 @@ public class RisingCommand {
                                                     }
                                                 }
                                                 SomethingRising.alivePlayers.add(pl.getUniqueId());
+                                                pl.getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 16));
+                                                pl.setGameMode(GameMode.SURVIVAL);
                                                 pl.sendMessage(ChatColor.GREEN + "The starter period has begun!");
                                                 pl.playSound(pl.getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1, 1);
                                             }
@@ -63,6 +66,34 @@ public class RisingCommand {
 
                             }
                     )
+            );
+
+            manager.command(
+                    RisingUtils.generateCommand(manager, "setfinalbordertime")
+                            .argument(IntegerArgument.builder("finalbordertime"))
+                            .handler(
+                                    context -> {
+                                        switch (SomethingRising.CURRENT_STATUS) {
+                                            case LOBBY:
+                                                for (Player pl: Bukkit.getOnlinePlayers()) {
+                                                    if (context.getSender() instanceof Player) {
+                                                        if (pl.hasPermission("something.rising.admin") && !pl.getName().equals(context.getSender().getName())) {
+                                                            pl.sendMessage(ChatColor.ITALIC+""+ChatColor.GRAY+"["+ context.getSender().getName()+": Set final border time to: "+ context.get("finalbordertime") +".]");
+                                                        }
+                                                    }
+                                                }
+                                                SomethingRising.GAME.setFinalBorderTime(context.get("finalbordertime"));
+                                                context.getSender().sendMessage(ChatColor.GREEN+"The final border time is now: "+context.get("finalbordertime")+"!");
+                                                break;
+                                            case ENDED:
+                                            case ACTIVE:
+                                            case BORDER:
+                                            case STARTER:
+                                                context.getSender().sendMessage(ChatColor.RED+"You can't change that now!");
+                                                break;
+                                        }
+                                    }
+                            )
             );
 
             manager.command(
@@ -195,6 +226,35 @@ public class RisingCommand {
             );
 
             manager.command(
+                    RisingUtils.generateCommand(manager, "setlavaheight")
+                            .argument(IntegerArgument.builder("lavaheight"))
+                            .handler(
+                                    context -> {
+                                        switch (SomethingRising.CURRENT_STATUS) {
+                                            case LOBBY:
+                                                for (Player pl: Bukkit.getOnlinePlayers()) {
+                                                    if (context.getSender() instanceof Player) {
+                                                        if (pl.hasPermission("something.rising.admin") && !pl.getName().equals(context.getSender().getName())) {
+                                                            pl.sendMessage(ChatColor.ITALIC+""+ChatColor.GRAY+"["+ context.getSender().getName()+": Set lava height to: "+ context.get("lavaheight") +".]");
+                                                        }
+                                                    }
+                                                }
+                                                SomethingRising.GAME.setLavaHeightLimit(context.get("lavaheight"));
+                                                context.getSender().sendMessage(ChatColor.GREEN+"The lava height is now: "+context.get("lavaheight")+"!");
+                                                break;
+                                            case ENDED:
+                                            case ACTIVE:
+                                            case BORDER:
+                                            case STARTER:
+                                                context.getSender().sendMessage(ChatColor.RED+"You can't change that now!");
+                                                break;
+                                        }
+
+                                    }
+                            )
+            );
+
+            manager.command(
                     RisingUtils.generateCommand(manager, "revive")
                             .argument(PlayerArgument.builder("revivedPlayer"))
                             .handler(
@@ -205,12 +265,12 @@ public class RisingCommand {
                                         switch (SomethingRising.CURRENT_STATUS) {
                                             case LOBBY:
                                             case ENDED:
-                                            case STARTER:
-                                            case BORDER:
                                                 context.getSender().sendMessage(ChatColor.RED+"This is not a period where you can revive people!");
                                                 break;
+                                            case STARTER:
+                                            case BORDER:
                                             case ACTIVE:
-                                                if (SomethingRising.alivePlayers.contains(revivedPlayer.getUniqueId())) {
+                                                if (!SomethingRising.alivePlayers.contains(revivedPlayer.getUniqueId())) {
                                                     for (Player pl: Bukkit.getOnlinePlayers()) {
                                                         if (context.getSender() instanceof Player) {
                                                             if (pl.hasPermission("something.rising.admin") && !pl.getName().equals(context.getSender().getName())) {
