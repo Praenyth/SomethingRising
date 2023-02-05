@@ -30,7 +30,6 @@ public class RisingCommand {
             // something rising command
             manager.command(
                     RisingUtils.generateCommand(manager, "start")
-                            .permission("something.rising.admin")
                             .handler(context -> {
                                 switch (SomethingRising.CURRENT_STATUS) {
                                     case ACTIVE:
@@ -43,15 +42,15 @@ public class RisingCommand {
                                         break;
                                     case LOBBY:
                                         SomethingRising.CURRENT_STATUS = GamePeriod.STARTER;
-                                        SomethingRising.GAME.startLavaRise();
+                                        SomethingRising.STARTER_PRE_EVENT.startFromStarter(plugin);
                                         for (Player pl : Bukkit.getOnlinePlayers()) {
                                             if (context.getSender() instanceof Player) {
                                                 if (pl.hasPermission("something.rising.admin") && !pl.getName().equals(context.getSender().getName())) {
-                                                    pl.sendMessage(ChatColor.GRAY+"["+ context.getSender().getName()+": Started the lava rise.]");
+                                                    pl.sendMessage(ChatColor.GRAY+"["+ context.getSender().getName()+": Started the minigame.]");
                                                 }
                                             }
                                             SomethingRising.alivePlayers.add(pl.getUniqueId());
-                                            pl.sendMessage(ChatColor.GREEN + "The lava will now be rising! Good luck!");
+                                            pl.sendMessage(ChatColor.GREEN + "The starter period has begun!");
                                         }
                                         break;
                                 }
@@ -76,15 +75,68 @@ public class RisingCommand {
                                     SomethingRising.GAME.setTicksPerRise(context.get("time"));
                                     context.getSender().sendMessage(ChatColor.GREEN+"The ticks per lava rise has been set to " + context.get("time") + "!");
                                 } else {
-                                context.getSender().sendMessage(ChatColor.RED+"That value is way too high! Are you trying to make your games last a million years?");
+                                    context.getSender().sendMessage(ChatColor.RED+"That value is way too high! Are you trying to make your games last a million years?");
                                 }
                             }
                     )
             );
 
             manager.command(
+                    RisingUtils.generateCommand(manager, "setbordercloseseconds")
+                            .argument(IntegerArgument.builder("closeSeconds"))
+                            .handler(context -> {
+                                switch (SomethingRising.CURRENT_STATUS) {
+                                    case LOBBY:
+                                        for (Player pl: Bukkit.getOnlinePlayers()) {
+                                            if (context.getSender() instanceof Player) {
+                                                if (pl.hasPermission("something.rising.admin") && !pl.getName().equals(context.getSender().getName())) {
+                                                    pl.sendMessage(ChatColor.GRAY+"["+ context.getSender().getName()+": Set border close seconds to "+ context.get("closeSeconds") +".]");
+                                                }
+                                            }
+                                        }
+                                        SomethingRising.BORDER_PRE_EVENT.setBorderClosingSeconds(context.get("closeSeconds"));
+                                        context.getSender().sendMessage(ChatColor.GREEN+"The seconds it takes for the border to close is now "+context.get("closeSeconds"));
+                                        break;
+                                    case ENDED:
+                                    case ACTIVE:
+                                    case BORDER:
+                                    case STARTER:
+                                        context.getSender().sendMessage(ChatColor.RED+"You can't change that now!");
+                                        break;
+                                }
+                            })
+
+            );
+
+            manager.command(
+                    RisingUtils.generateCommand(manager, "starterperiodtime")
+                            .argument(IntegerArgument.builder("starterseconds"))
+                            .handler(context -> {
+                                switch (SomethingRising.CURRENT_STATUS) {
+                                    case LOBBY:
+                                        for (Player pl: Bukkit.getOnlinePlayers()) {
+                                            if (context.getSender() instanceof Player) {
+                                                if (pl.hasPermission("something.rising.admin") && !pl.getName().equals(context.getSender().getName())) {
+                                                    pl.sendMessage(ChatColor.GRAY+"["+ context.getSender().getName()+": Set the amount of time in the starter period to "+ context.get("starterseconds") +".]");
+                                                }
+                                            }
+                                        }
+                                        SomethingRising.STARTER_PRE_EVENT.setTimeLeft(context.get("starterseconds"));
+                                        context.getSender().sendMessage(ChatColor.GREEN+"The starter period will now last "+context.get("starterseconds"));
+                                        break;
+                                    case ENDED:
+                                    case ACTIVE:
+                                    case BORDER:
+                                    case STARTER:
+                                        context.getSender().sendMessage(ChatColor.RED+"You can't change that now!");
+                                        break;
+                                }
+                            })
+
+            );
+
+            manager.command(
                     RisingUtils.generateCommand(manager, "revive")
-                            .permission("something.rising.admin")
                             .argument(PlayerArgument.builder("revivedPlayer"))
                             .handler(
                                     context -> {

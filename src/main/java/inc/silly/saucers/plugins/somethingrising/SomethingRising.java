@@ -22,12 +22,6 @@ public final class SomethingRising extends JavaPlugin {
     public static List<UUID> alivePlayers = new ArrayList<>();
 
     @Override
-    public void onLoad() {
-
-        super.onLoad();
-    }
-
-    @Override
     public void onEnable() {
 
         getServer().getPluginManager().registerEvents(new PlayerElimination(), this);

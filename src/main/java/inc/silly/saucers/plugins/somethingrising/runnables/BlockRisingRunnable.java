@@ -1,11 +1,20 @@
 package inc.silly.saucers.plugins.somethingrising.runnables;
 
+import inc.silly.saucers.plugins.somethingrising.GamePeriod;
+import inc.silly.saucers.plugins.somethingrising.SomethingRising;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.concurrent.TimeUnit;
+
 public class BlockRisingRunnable extends BukkitRunnable {
+
+    private boolean runOnce = false;
 
     public BlockRisingRunnable(Plugin plugin, World world, int ticks) {
         this.plugin = plugin;
@@ -40,6 +49,16 @@ public class BlockRisingRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
+
+        if (!runOnce) {
+            world.getWorldBorder().setSize(20, TimeUnit.SECONDS, 60);
+            for (Player pl:
+                    Bukkit.getOnlinePlayers()) {
+                pl.sendMessage(ChatColor.YELLOW+"Lava will now rise. If you die beyond this point, you're eliminated. "+ChatColor.LIGHT_PURPLE+"Good luck :3");
+            }
+            SomethingRising.CURRENT_STATUS = GamePeriod.ACTIVE;
+            runOnce = true;
+        }
 
         ticksPerRise--;
         if (ticksPerRise <= 0) {
