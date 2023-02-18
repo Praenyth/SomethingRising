@@ -15,6 +15,17 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerElimination implements Listener {
 
+    public static void handleVictory() {
+        Player winner = Bukkit.getPlayer(SomethingRising.alivePlayers.get(0));
+        for (Player pl :
+                Bukkit.getOnlinePlayers()) {
+            pl.sendTitle(ChatColor.GREEN + winner.getName() + " has won!", "", 10, 70, 20);
+            pl.playSound(pl.getLocation(), Sound.ENTITY_ALLAY_DEATH, 1, 1);
+            pl.setGameMode(GameMode.SPECTATOR);
+            SomethingRising.CURRENT_STATUS = GamePeriod.ENDED;
+        }
+    }
+
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
@@ -32,23 +43,14 @@ public class PlayerElimination implements Listener {
                     player.setGameMode(GameMode.SPECTATOR);
                     SomethingRising.alivePlayers.remove(player.getUniqueId());
                     if (SomethingRising.alivePlayers.size() == 1) {
-
-                        Player winner = Bukkit.getPlayer(SomethingRising.alivePlayers.get(0));
-                        for (Player pl:
-                             Bukkit.getOnlinePlayers()) {
-                            pl.sendTitle(ChatColor.GREEN+winner.getName()+" has won!","",10,70,20);
-                            pl.playSound(pl.getLocation(), Sound.ENTITY_ALLAY_DEATH, 1, 1);
-                            pl.setGameMode(GameMode.SPECTATOR);
-                            SomethingRising.CURRENT_STATUS = GamePeriod.ENDED;
-                        }
-
+                        handleVictory();
                     } else {
                         event.setDeathMessage(
-                                ChatColor.RED+player.getName()+
+                                ChatColor.RED + player.getName() +
                                         " has been eliminated. (" +
-                                        SomethingRising.alivePlayers.size()+
-                                        "/"+
-                                        Bukkit.getOnlinePlayers().size()+")"
+                                        SomethingRising.alivePlayers.size() +
+                                        "/" +
+                                        Bukkit.getOnlinePlayers().size() + ")"
                         );
                     }
 
@@ -95,22 +97,12 @@ public class PlayerElimination implements Listener {
                     for (Player pl :
                             Bukkit.getOnlinePlayers()) {
 
-                        pl.sendMessage(ChatColor.RED+player.getName()+" has left!");
+                        pl.sendMessage(ChatColor.RED + player.getName() + " has left!");
 
                     }
 
                     if (SomethingRising.alivePlayers.size() == 1) {
-
-                        Player winner = Bukkit.getPlayer(SomethingRising.alivePlayers.get(0));
-
-                        for (Player pl :
-                                Bukkit.getOnlinePlayers()) {
-                            pl.sendTitle(ChatColor.GREEN + winner.getName() + " has won!", "", 10, 70, 20);
-                            pl.playSound(pl.getLocation(), Sound.ENTITY_ALLAY_DEATH, 1, 1);
-                            pl.setGameMode(GameMode.SPECTATOR);
-                            SomethingRising.CURRENT_STATUS = GamePeriod.ENDED;
-                        }
-
+                        handleVictory();
                     }
                 }
         }

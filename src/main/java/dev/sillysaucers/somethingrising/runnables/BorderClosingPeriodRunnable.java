@@ -16,14 +16,13 @@ import java.util.concurrent.TimeUnit;
 
 public class BorderClosingPeriodRunnable extends BukkitRunnable {
 
+    private World world;
+    private boolean startedBorderClosePhase = false;
+    private int borderClosingSeconds = 1200;
+
     public BorderClosingPeriodRunnable(World world) {
         this.world = world;
     }
-
-    private World world;
-    private boolean startedBorderClosePhase = false;
-
-    private int borderClosingSeconds = 1200;
 
     public void startBorderClose(Plugin plugin) {
         this.runTaskTimer(plugin, 0, 20);
@@ -32,21 +31,22 @@ public class BorderClosingPeriodRunnable extends BukkitRunnable {
     public void setBorderClosingSeconds(int seconds) {
         borderClosingSeconds = seconds;
     }
+
     @Override
     public void run() {
         if (!startedBorderClosePhase) {
             SomethingRising.CURRENT_STATUS = GamePeriod.BORDER;
             world.getWorldBorder().setSize(100, TimeUnit.SECONDS, borderClosingSeconds);
-            for (Player pl:
+            for (Player pl :
                     Bukkit.getOnlinePlayers()) {
-                pl.sendMessage(ChatColor.YELLOW+"The border will now close in! PVP is now enabled.");
+                pl.sendMessage(ChatColor.YELLOW + "The border will now close in! PVP is now enabled.");
             }
             startedBorderClosePhase = true;
         }
         borderClosingSeconds--;
-        for (Player pl:
+        for (Player pl :
                 Bukkit.getOnlinePlayers()) {
-            pl.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.RED+ RisingUtils.displayTimer(borderClosingSeconds)));
+            pl.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.RED + RisingUtils.displayTimer(borderClosingSeconds)));
         }
         if (borderClosingSeconds <= 0) {
             SomethingRising.GAME.startLavaRise();

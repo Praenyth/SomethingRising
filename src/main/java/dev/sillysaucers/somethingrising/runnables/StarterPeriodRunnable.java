@@ -16,14 +16,13 @@ public class StarterPeriodRunnable extends BukkitRunnable {
     Plugin plugin;
 
     private boolean runOnce = false;
-
+    private int timeLeft = 1200;
+    private World world;
+    private double worldBorderRadius = 500;
     public StarterPeriodRunnable(Plugin plugin) {
         this.plugin = plugin;
     }
 
-    private int timeLeft = 1200;
-    private World world;
-    private double worldBorderRadius = 500;
     public void startFromStarter(Plugin plugin, World world) {
         this.world = world;
         this.runTaskTimer(plugin, 0, 20);
@@ -48,9 +47,9 @@ public class StarterPeriodRunnable extends BukkitRunnable {
         }
 
         timeLeft--;
-        for (Player pl:
+        for (Player pl :
                 Bukkit.getOnlinePlayers()) {
-            pl.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN+ RisingUtils.displayTimer(timeLeft)));
+            pl.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + RisingUtils.displayTimer(timeLeft)));
         }
         if (timeLeft <= 0) {
             SomethingRising.BORDER_PRE_EVENT.startBorderClose(plugin);

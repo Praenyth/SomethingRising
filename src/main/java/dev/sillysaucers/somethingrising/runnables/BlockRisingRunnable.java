@@ -14,7 +14,16 @@ import java.util.concurrent.TimeUnit;
 
 public class BlockRisingRunnable extends BukkitRunnable {
 
+    public static int originalTicks;
+    private static int Y_LEVEL = -64;
+    public int lavaHeight = 318;
     private boolean runOnce = false;
+    private Plugin plugin;
+    private World world;
+    private int ticksPerRise;
+    private Material block = Material.LAVA;
+
+    private int finalBorderTime = 300;
 
     public BlockRisingRunnable(Plugin plugin, World world, int ticks) {
         this.plugin = plugin;
@@ -22,20 +31,6 @@ public class BlockRisingRunnable extends BukkitRunnable {
         this.ticksPerRise = ticks;
         originalTicks = ticks;
     }
-
-    private Plugin plugin;
-
-    private static int Y_LEVEL = -64;
-    private World world;
-    private int ticksPerRise;
-    public static int originalTicks;
-
-    private Material block = Material.LAVA;
-
-    private int finalBorderTime = 300;
-
-    public int lavaHeight = 318;
-
 
     public static void resetyLevel() {
         Y_LEVEL = -64;
@@ -70,9 +65,9 @@ public class BlockRisingRunnable extends BukkitRunnable {
 
         if (!runOnce) {
             world.getWorldBorder().setSize(20, TimeUnit.SECONDS, finalBorderTime);
-            for (Player pl:
+            for (Player pl :
                     Bukkit.getOnlinePlayers()) {
-                pl.sendMessage(ChatColor.YELLOW+"Lava will now rise. If you die beyond this point, you're eliminated. "+ChatColor.LIGHT_PURPLE+"Good luck :3");
+                pl.sendMessage(ChatColor.YELLOW + "Lava will now rise. If you die beyond this point, you're eliminated. " + ChatColor.LIGHT_PURPLE + "Good luck :3");
             }
             SomethingRising.CURRENT_STATUS = GamePeriod.ACTIVE;
             runOnce = true;

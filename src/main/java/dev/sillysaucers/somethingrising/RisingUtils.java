@@ -15,15 +15,15 @@ public class RisingUtils {
 
     public static Command.Builder<CommandSender> generateCommand(CommandManager<CommandSender> manager, String argument) {
         return Command.<CommandSender>newBuilder(
-                "rising",
-                manager.createDefaultCommandMeta()
-        ).argument(StaticArgument.of(argument))
+                        "rising",
+                        manager.createDefaultCommandMeta()
+                ).argument(StaticArgument.of(argument))
                 .permission("something.rising.admin");
     }
 
     public static Player chooseRandomPlayer() {
         ArrayList<String> allPlayers = new ArrayList<>();
-        for(Player pl : Bukkit.getOnlinePlayers()) {
+        for (Player pl : Bukkit.getOnlinePlayers()) {
             allPlayers.add(pl.getName());
             System.out.println(pl.getName());
         }
