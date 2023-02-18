@@ -1,4 +1,4 @@
-package inc.silly.saucers.plugins.somethingrising;
+package dev.sillysaucers.somethingrising;
 
 import cloud.commandframework.Command;
 import cloud.commandframework.CommandManager;

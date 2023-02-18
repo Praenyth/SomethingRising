@@ -1,16 +1,15 @@
-package inc.silly.saucers.plugins.somethingrising.commands;
+package dev.sillysaucers.somethingrising.commands;
 
 import cloud.commandframework.CommandManager;
 import cloud.commandframework.arguments.standard.DoubleArgument;
 import cloud.commandframework.arguments.standard.IntegerArgument;
 import cloud.commandframework.bukkit.BukkitCommandManager;
-import cloud.commandframework.bukkit.parsers.BlockPredicateArgument;
 import cloud.commandframework.bukkit.parsers.MaterialArgument;
 import cloud.commandframework.bukkit.parsers.PlayerArgument;
 import cloud.commandframework.execution.CommandExecutionCoordinator;
-import inc.silly.saucers.plugins.somethingrising.GamePeriod;
-import inc.silly.saucers.plugins.somethingrising.RisingUtils;
-import inc.silly.saucers.plugins.somethingrising.SomethingRising;
+import dev.sillysaucers.somethingrising.GamePeriod;
+import dev.sillysaucers.somethingrising.RisingUtils;
+import dev.sillysaucers.somethingrising.SomethingRising;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

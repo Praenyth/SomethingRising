@@ -1,7 +1,7 @@
-package inc.silly.saucers.plugins.somethingrising.runnables;
+package dev.sillysaucers.somethingrising.runnables;
 
-import inc.silly.saucers.plugins.somethingrising.GamePeriod;
-import inc.silly.saucers.plugins.somethingrising.SomethingRising;
+import dev.sillysaucers.somethingrising.GamePeriod;
+import dev.sillysaucers.somethingrising.SomethingRising;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

@@ -1,4 +1,4 @@
-package inc.silly.saucers.plugins.somethingrising.listeners;
+package dev.sillysaucers.somethingrising.listeners;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

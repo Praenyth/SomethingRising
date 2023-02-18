@@ -1,7 +1,7 @@
-package inc.silly.saucers.plugins.somethingrising.runnables;
+package dev.sillysaucers.somethingrising.runnables;
 
-import inc.silly.saucers.plugins.somethingrising.RisingUtils;
-import inc.silly.saucers.plugins.somethingrising.SomethingRising;
+import dev.sillysaucers.somethingrising.RisingUtils;
+import dev.sillysaucers.somethingrising.SomethingRising;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
