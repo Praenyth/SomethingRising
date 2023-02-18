@@ -3,12 +3,10 @@ package dev.sillysaucers.somethingrising;
 import cloud.commandframework.Command;
 import cloud.commandframework.CommandManager;
 import cloud.commandframework.arguments.StaticArgument;
-import org.bukkit.Bukkit;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class RisingUtils {
@@ -19,17 +17,6 @@ public class RisingUtils {
                         manager.createDefaultCommandMeta()
                 ).argument(StaticArgument.of(argument))
                 .permission("something.rising.admin");
-    }
-
-    public static Player chooseRandomPlayer() {
-        ArrayList<String> allPlayers = new ArrayList<>();
-        for (Player pl : Bukkit.getOnlinePlayers()) {
-            allPlayers.add(pl.getName());
-            System.out.println(pl.getName());
-        }
-        int random = new Random().nextInt(allPlayers.size());
-
-        return Bukkit.getPlayer(allPlayers.get(random));
     }
 
     public static String displayTimer(int sec) {
@@ -46,4 +33,24 @@ public class RisingUtils {
         }
     }
 
+    public static TextComponent getColoredTimer(String str, int secondsLeft, int startingSeconds) {
+        // Calculate the percentage of time elapsed
+        double percentElapsed = 1.0 - ((double) secondsLeft / startingSeconds);
+
+        // Calculate the RGB values based on the percentage elapsed
+        int red, green;
+        if (percentElapsed < 0.5) {
+            green = 255;
+            red = (int) (percentElapsed * 2 * 255);
+        } else {
+            green = (int) ((1 - percentElapsed) * 2 * 255);
+            red = 255;
+        }
+
+        // Construct the hex color code for the text color
+        String colorCode = String.format("#%02x%02x00", red, green);
+        TextComponent component = new TextComponent(str);
+        component.setColor(ChatColor.of(colorCode));
+        return component;
+    }
 }

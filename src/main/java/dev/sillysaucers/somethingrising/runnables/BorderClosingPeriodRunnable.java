@@ -14,11 +14,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.concurrent.TimeUnit;
 
+import static dev.sillysaucers.somethingrising.RisingUtils.getColoredTimer;
+
 public class BorderClosingPeriodRunnable extends BukkitRunnable {
 
     private World world;
     private boolean startedBorderClosePhase = false;
     private int borderClosingSeconds = 1200;
+    private final int initialBorderClosingSeconds = 1200;
 
     public BorderClosingPeriodRunnable(World world) {
         this.world = world;
@@ -46,7 +49,7 @@ public class BorderClosingPeriodRunnable extends BukkitRunnable {
         borderClosingSeconds--;
         for (Player pl :
                 Bukkit.getOnlinePlayers()) {
-            pl.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.RED + RisingUtils.displayTimer(borderClosingSeconds)));
+            pl.spigot().sendMessage(ChatMessageType.ACTION_BAR, getColoredTimer(RisingUtils.displayTimer(borderClosingSeconds), borderClosingSeconds, initialBorderClosingSeconds));
         }
         if (borderClosingSeconds <= 0) {
             SomethingRising.GAME.startLavaRise();

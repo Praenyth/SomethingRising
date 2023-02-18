@@ -26,6 +26,53 @@ public class PlayerElimination implements Listener {
         }
     }
 
+    public static void handlePlayerDeath(PlayerDeathEvent event) {
+        Player player = event.getEntity();
+
+        event.setKeepInventory(true);
+        player.setGameMode(GameMode.SPECTATOR);
+        SomethingRising.alivePlayers.remove(player.getUniqueId());
+        if (SomethingRising.alivePlayers.size() == 1) {
+            handleVictory();
+        } else {
+            event.setDeathMessage(
+                    ChatColor.RED + player.getName() +
+                            " has been eliminated. (" +
+                            SomethingRising.alivePlayers.size() +
+                            "/" +
+                            Bukkit.getOnlinePlayers().size() + ")"
+            );
+        }
+
+    }
+
+    public static void handlePlayerDisconnect(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+
+        switch (SomethingRising.CURRENT_STATUS) {
+
+            case STARTER:
+            case BORDER:
+            case ACTIVE:
+                if (SomethingRising.alivePlayers.contains(player.getUniqueId())) {
+
+                    SomethingRising.alivePlayers.remove(player.getUniqueId());
+
+                    for (Player pl :
+                            Bukkit.getOnlinePlayers()) {
+
+                        pl.sendMessage(ChatColor.RED + player.getName() + " has left!");
+
+                    }
+
+                    if (SomethingRising.alivePlayers.size() == 1) {
+                        handleVictory();
+                    }
+                }
+        }
+
+    }
+
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
@@ -38,22 +85,7 @@ public class PlayerElimination implements Listener {
                 break;
             case ACTIVE:
                 if (SomethingRising.alivePlayers.contains(player.getUniqueId())) {
-
-                    event.setKeepInventory(true);
-                    player.setGameMode(GameMode.SPECTATOR);
-                    SomethingRising.alivePlayers.remove(player.getUniqueId());
-                    if (SomethingRising.alivePlayers.size() == 1) {
-                        handleVictory();
-                    } else {
-                        event.setDeathMessage(
-                                ChatColor.RED + player.getName() +
-                                        " has been eliminated. (" +
-                                        SomethingRising.alivePlayers.size() +
-                                        "/" +
-                                        Bukkit.getOnlinePlayers().size() + ")"
-                        );
-                    }
-
+                    handlePlayerDeath(event);
                 } else {
                     event.setDeathMessage("");
                 }
@@ -82,31 +114,7 @@ public class PlayerElimination implements Listener {
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
-
-        Player player = event.getPlayer();
-
-        switch (SomethingRising.CURRENT_STATUS) {
-
-            case STARTER:
-            case BORDER:
-            case ACTIVE:
-                if (SomethingRising.alivePlayers.contains(player.getUniqueId())) {
-
-                    SomethingRising.alivePlayers.remove(player.getUniqueId());
-
-                    for (Player pl :
-                            Bukkit.getOnlinePlayers()) {
-
-                        pl.sendMessage(ChatColor.RED + player.getName() + " has left!");
-
-                    }
-
-                    if (SomethingRising.alivePlayers.size() == 1) {
-                        handleVictory();
-                    }
-                }
-        }
-
+        handlePlayerDisconnect(event);
     }
 
 }
