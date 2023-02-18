@@ -49,11 +49,11 @@
                     <relocations>
                         <relocation>
                             <pattern>cloud.commandframework</pattern>
-                            <shadedPattern>inc.silly.saucers.plugins.shaded.cloud</shadedPattern>
+                            <shadedPattern>dev.sillysaucers.shaded.cloud</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>io.leangen.geantyref</pattern>
-                            <shadedPattern>inc.silly.saucers.plugins.shaded.typetoken</shadedPattern>
+                            <shadedPattern>dev.sillysaucers.shaded.typetoken</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
