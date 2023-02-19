@@ -1,12 +1,12 @@
-package inc.silly.saucers.plugins.somethingrising;
+package dev.sillysaucers.somethingrising;
 
-import inc.silly.saucers.plugins.somethingrising.commands.RisingCommand;
-import inc.silly.saucers.plugins.somethingrising.listeners.HeightLimit;
-import inc.silly.saucers.plugins.somethingrising.listeners.InitialJoin;
-import inc.silly.saucers.plugins.somethingrising.listeners.PlayerElimination;
-import inc.silly.saucers.plugins.somethingrising.runnables.BlockRisingRunnable;
-import inc.silly.saucers.plugins.somethingrising.runnables.BorderClosingPeriodRunnable;
-import inc.silly.saucers.plugins.somethingrising.runnables.StarterPeriodRunnable;
+import dev.sillysaucers.somethingrising.commands.RisingCommand;
+import dev.sillysaucers.somethingrising.listeners.HeightLimit;
+import dev.sillysaucers.somethingrising.listeners.InitialJoinManager;
+import dev.sillysaucers.somethingrising.listeners.PlayerElimination;
+import dev.sillysaucers.somethingrising.runnables.BlockRisingRunnable;
+import dev.sillysaucers.somethingrising.runnables.BorderClosingPeriodRunnable;
+import dev.sillysaucers.somethingrising.runnables.StarterPeriodRunnable;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public final class SomethingRising extends JavaPlugin {
     public void onEnable() {
 
         getServer().getPluginManager().registerEvents(new PlayerElimination(), this);
-        getServer().getPluginManager().registerEvents(new InitialJoin(), this);
+        getServer().getPluginManager().registerEvents(new InitialJoinManager(), this);
         getServer().getPluginManager().registerEvents(new HeightLimit(), this);
         GAME = new BlockRisingRunnable(this, getServer().getWorlds().get(0), 20);
         STARTER_PRE_EVENT = new StarterPeriodRunnable(this);

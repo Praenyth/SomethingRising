@@ -1,13 +1,13 @@
-package inc.silly.saucers.plugins.somethingrising.listeners;
+package dev.sillysaucers.somethingrising.listeners;
 
-import inc.silly.saucers.plugins.somethingrising.GamePeriod;
-import inc.silly.saucers.plugins.somethingrising.SomethingRising;
+import dev.sillysaucers.somethingrising.GamePeriod;
+import dev.sillysaucers.somethingrising.SomethingRising;
 import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-public class InitialJoin implements Listener {
+public class InitialJoinManager implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {

@@ -1,8 +1,8 @@
 name: SomethingRising
 version: '${project.version}'
-main: inc.silly.saucers.plugins.somethingrising.SomethingRising
+main: dev.sillysaucers.somethingrising.SomethingRising
 api-version: 1.19
 prefix: SomethingRising
-authors: [ Prae ]
+authors: [ Prae, Candycup ]
 description: A select block rising plugin
 website: https:/twitter.com/praenyth
