@@ -67,7 +67,7 @@ public class BlockRisingRunnable extends BukkitRunnable {
             world.getWorldBorder().setSize(20, TimeUnit.SECONDS, finalBorderTime);
             for (Player pl :
                     Bukkit.getOnlinePlayers()) {
-                pl.sendMessage(ChatColor.YELLOW + "Lava will now rise. If you die beyond this point, you're eliminated. " + ChatColor.LIGHT_PURPLE + "Good luck :3");
+                pl.sendMessage(ChatColor.YELLOW + "Blocks will now rise. If you die beyond this point, you're eliminated. " + ChatColor.LIGHT_PURPLE + "Good luck :3");
             }
             SomethingRising.CURRENT_STATUS = GamePeriod.ACTIVE;
             runOnce = true;
