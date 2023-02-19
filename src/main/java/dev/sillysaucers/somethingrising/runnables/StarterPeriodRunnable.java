@@ -3,9 +3,7 @@ package dev.sillysaucers.somethingrising.runnables;
 import dev.sillysaucers.somethingrising.RisingUtils;
 import dev.sillysaucers.somethingrising.SomethingRising;
 import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -15,11 +13,10 @@ import static dev.sillysaucers.somethingrising.RisingUtils.getColoredTimer;
 
 public class StarterPeriodRunnable extends BukkitRunnable {
 
+    private final int initialTime = 1200;
     Plugin plugin;
-
     private boolean runOnce = false;
     private int timeLeft = 1200;
-    private final int initialTime = 1200;
     private World world;
     private double worldBorderRadius = 500;
 

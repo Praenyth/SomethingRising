@@ -4,7 +4,6 @@ import dev.sillysaucers.somethingrising.GamePeriod;
 import dev.sillysaucers.somethingrising.RisingUtils;
 import dev.sillysaucers.somethingrising.SomethingRising;
 import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -18,10 +17,10 @@ import static dev.sillysaucers.somethingrising.RisingUtils.getColoredTimer;
 
 public class BorderClosingPeriodRunnable extends BukkitRunnable {
 
+    private final int initialBorderClosingSeconds = 1200;
     private World world;
     private boolean startedBorderClosePhase = false;
     private int borderClosingSeconds = 1200;
-    private final int initialBorderClosingSeconds = 1200;
 
     public BorderClosingPeriodRunnable(World world) {
         this.world = world;
