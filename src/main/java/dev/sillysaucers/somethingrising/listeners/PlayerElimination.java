@@ -27,21 +27,30 @@ public class PlayerElimination implements Listener {
     }
 
     public static void handlePlayerDeath(PlayerDeathEvent event) {
-        Player player = event.getEntity();
+        switch (SomethingRising.CURRENT_STATUS) {
+            case LOBBY:
+            case ENDED:
+            case STARTER:
+            case BORDER:
+                event.setDeathMessage("");
+                break;
+            case ACTIVE:
+                Player player = event.getEntity();
 
-        event.setKeepInventory(true);
-        player.setGameMode(GameMode.SPECTATOR);
-        SomethingRising.alivePlayers.remove(player.getUniqueId());
-        if (SomethingRising.alivePlayers.size() == 1) {
-            handleVictory();
-        } else {
-            event.setDeathMessage(
-                    ChatColor.RED + player.getName() +
-                            " has been eliminated. (" +
-                            SomethingRising.alivePlayers.size() +
-                            "/" +
-                            Bukkit.getOnlinePlayers().size() + ")"
-            );
+                event.setKeepInventory(true);
+                player.setGameMode(GameMode.SPECTATOR);
+                SomethingRising.alivePlayers.remove(player.getUniqueId());
+                if (SomethingRising.alivePlayers.size() == 1) {
+                    handleVictory();
+                } else {
+                    event.setDeathMessage(
+                            ChatColor.RED + player.getName() +
+                                    " has been eliminated. (" +
+                                    SomethingRising.alivePlayers.size() +
+                                    "/" +
+                                    Bukkit.getOnlinePlayers().size() + ")"
+                    );
+                }
         }
 
     }
