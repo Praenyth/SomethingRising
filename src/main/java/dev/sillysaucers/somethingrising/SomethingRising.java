@@ -48,6 +48,10 @@ public final class SomethingRising extends JavaPlugin {
 
                     if (player.getLocation().getY() <= Y_LEVEL) {
 
+                        if (CURRENT_STATUS.equals(GamePeriod.ENDED)) {
+                            cancel();
+                        }
+
                         player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20, 0, true, false));
 
                         player.damage(1);
