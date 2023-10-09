@@ -47,6 +47,7 @@ public class RisingCommand {
                                                 case LOBBY:
                                                     SomethingRising.CURRENT_STATUS = GamePeriod.STARTER;
                                                     SomethingRising.STARTER_PRE_EVENT.startFromStarter(plugin, ((Player) context.getSender()).getWorld());
+                                                    SomethingRising.damage.runTaskTimer(plugin, 1, 0);
                                                     for (Player pl : Bukkit.getOnlinePlayers()) {
                                                         if (context.getSender() instanceof Player) {
                                                             if (pl.hasPermission("something.rising.admin") && !pl.getName().equals(context.getSender().getName())) {
@@ -127,25 +128,15 @@ public class RisingCommand {
                     RisingUtils.generateCommand(manager, "setblock")
                             .argument(MaterialArgument.builder("block"))
                             .handler(context -> {
-                                switch (SomethingRising.CURRENT_STATUS) {
-                                    case LOBBY:
-                                        for (Player pl : Bukkit.getOnlinePlayers()) {
-                                            if (context.getSender() instanceof Player) {
-                                                if (pl.hasPermission("something.rising.admin") && !pl.getName().equals(context.getSender().getName())) {
-                                                    pl.sendMessage(ChatColor.ITALIC + "" + ChatColor.GRAY + "[" + context.getSender().getName() + ": Set block to " + context.get("block") + ".]");
-                                                }
-                                            }
+                                for (Player pl : Bukkit.getOnlinePlayers()) {
+                                    if (context.getSender() instanceof Player) {
+                                        if (pl.hasPermission("something.rising.admin") && !pl.getName().equals(context.getSender().getName())) {
+                                            pl.sendMessage(ChatColor.ITALIC + "" + ChatColor.GRAY + "[" + context.getSender().getName() + ": Set block to " + context.get("block") + ".]");
                                         }
-                                        SomethingRising.GAME.setBlock(context.get("block"));
-                                        context.getSender().sendMessage(ChatColor.GREEN + "The block used in the block rising is now: " + context.get("block") + "!");
-                                        break;
-                                    case ENDED:
-                                    case ACTIVE:
-                                    case BORDER:
-                                    case STARTER:
-                                        context.getSender().sendMessage(ChatColor.RED + "You can't change that now!");
-                                        break;
+                                    }
                                 }
+                                SomethingRising.GAME.setBlock(context.get("block"));
+                                context.getSender().sendMessage(ChatColor.GREEN + "The block used in the block rising is now: " + context.get("block") + "!");
                             })
             );
 
