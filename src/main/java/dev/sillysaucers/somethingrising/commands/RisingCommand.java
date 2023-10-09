@@ -42,7 +42,7 @@ public class RisingCommand {
                                                     context.getSender().sendMessage(ChatColor.RED + "There is a game currently going on.");
                                                     break;
                                                 case ENDED:
-                                                    context.getSender().sendMessage(ChatColor.RED + "Please restart your server before starting another game.");
+                                                    context.getSender().sendMessage(ChatColor.RED + "Please delete the world and restart your server before starting another game.");
                                                     break;
                                                 case LOBBY:
                                                     SomethingRising.CURRENT_STATUS = GamePeriod.STARTER;
@@ -57,7 +57,7 @@ public class RisingCommand {
                                                         SomethingRising.alivePlayers.add(pl.getUniqueId());
                                                         pl.getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 16));
                                                         pl.setGameMode(GameMode.SURVIVAL);
-                                                        pl.sendMessage(ChatColor.GREEN + "The starter period has begun!");
+                                                        pl.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "The starter period has begun!");
                                                         pl.playSound(pl.getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1, 1);
                                                     }
                                                     break;
@@ -83,7 +83,7 @@ public class RisingCommand {
                                                     }
                                                 }
                                                 SomethingRising.GAME.setFinalBorderTime(context.get("finalbordertime"));
-                                                context.getSender().sendMessage(ChatColor.GREEN + "The final border time is now: " + context.get("finalbordertime") + "!");
+                                                context.getSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "The final border time is now: " + context.get("finalbordertime") + " seconds!");
                                                 break;
                                             case ENDED:
                                             case ACTIVE:
@@ -111,7 +111,7 @@ public class RisingCommand {
                                                     }
                                                 }
                                                 SomethingRising.STARTER_PRE_EVENT.setWorldBorderRadius(context.get("borderradius"));
-                                                context.getSender().sendMessage(ChatColor.GREEN + "The starter border is now: " + context.get("borderradius") + "!");
+                                                context.getSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "The starter border is now: " + context.get("borderradius") + "!");
                                                 break;
                                             case ENDED:
                                             case ACTIVE:
@@ -136,7 +136,7 @@ public class RisingCommand {
                                     }
                                 }
                                 SomethingRising.GAME.setBlock(context.get("block"));
-                                context.getSender().sendMessage(ChatColor.GREEN + "The block used in the block rising is now: " + context.get("block") + "!");
+                                context.getSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD +  "The block used in the block rising is now: " + context.get("block") + "!");
                             })
             );
 
@@ -153,7 +153,7 @@ public class RisingCommand {
                                                 }
                                             }
                                             SomethingRising.GAME.setTicksPerRise(context.get("time"));
-                                            context.getSender().sendMessage(ChatColor.GREEN + "The ticks per lava rise has been set to " + context.get("time") + "!");
+                                            context.getSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "The ticks per lava rise has been set to " + context.get("time") + "!");
                                         } else {
                                             context.getSender().sendMessage(ChatColor.RED + "That value is way too high! Are you trying to make your games last a million years?");
                                         }
@@ -175,7 +175,7 @@ public class RisingCommand {
                                             }
                                         }
                                         SomethingRising.BORDER_PRE_EVENT.setBorderClosingSeconds(context.get("closeSeconds"));
-                                        context.getSender().sendMessage(ChatColor.GREEN + "The seconds it takes for the border to close is now " + context.get("closeSeconds"));
+                                        context.getSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "The seconds it takes for the border to close is now " + context.get("closeSeconds") + " seconds!");
                                         break;
                                     case ENDED:
                                     case ACTIVE:
@@ -202,7 +202,7 @@ public class RisingCommand {
                                             }
                                         }
                                         SomethingRising.STARTER_PRE_EVENT.setTimeLeft(context.get("starterseconds"));
-                                        context.getSender().sendMessage(ChatColor.GREEN + "The starter period will now last " + context.get("starterseconds"));
+                                        context.getSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "The starter period will now last " + context.get("starterseconds") + " seconds!");
                                         break;
                                     case ENDED:
                                     case ACTIVE:
@@ -230,7 +230,7 @@ public class RisingCommand {
                                                     }
                                                 }
                                                 SomethingRising.GAME.setLavaHeightLimit(context.get("lavaheight"));
-                                                context.getSender().sendMessage(ChatColor.GREEN + "The lava height is now: " + context.get("lavaheight") + "!");
+                                                context.getSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "The lava height can now reach: " + context.get("lavaheight") + "!");
                                                 break;
                                             case ENDED:
                                             case ACTIVE:
@@ -282,7 +282,7 @@ public class RisingCommand {
 
                                                     for (Player pl :
                                                             Bukkit.getOnlinePlayers()) {
-                                                        pl.sendMessage(ChatColor.YELLOW + revivedPlayer.getDisplayName() + ChatColor.GREEN + " has been revived!");
+                                                        pl.sendMessage(ChatColor.YELLOW + "" + ChatColor.BOLD + revivedPlayer.getDisplayName() + ChatColor.GREEN + " has been revived!");
                                                     }
                                                 } else {
                                                     context.getSender().sendMessage(ChatColor.RED + "That player is still alive!");
