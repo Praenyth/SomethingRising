@@ -5,7 +5,6 @@ import dev.sillysaucers.somethingrising.SomethingRising;
 import org.bukkit.*;
 import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Display;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -15,23 +14,25 @@ import org.joml.Vector3f;
 
 import java.util.concurrent.TimeUnit;
 
+import static dev.sillysaucers.somethingrising.SomethingRising.config;
+
 public class BlockRisingRunnable extends BukkitRunnable {
 
     public static int originalTicks;
     public static int Y_LEVEL = -65;
-    public int lavaHeight = 318;
+    public int blockHeight = 318;
+    public int buildHeight = 319;
     private boolean runOnce = false;
-    private Plugin plugin;
-    private World world;
-    private int ticksPerRise;
-    private Material block = Material.LAVA;
+    private final Plugin plugin;
+    private final World world;
+    private int ticksPerRise = 40;
+    private Material block = Material.LAVA_CAULDRON;
 
     private int finalBorderTime = 300;
 
     public BlockRisingRunnable(Plugin plugin, World world, int ticks) {
         this.plugin = plugin;
         this.world = world;
-        this.ticksPerRise = ticks;
         originalTicks = ticks;
     }
 
@@ -54,8 +55,12 @@ public class BlockRisingRunnable extends BukkitRunnable {
         finalBorderTime = seconds;
     }
 
-    public void setLavaHeightLimit(int heightLimit) {
-        lavaHeight = heightLimit;
+    public void setBlockHeightLimit(int lavaHeight) {
+        this.blockHeight = lavaHeight;
+    }
+
+    public void setBuildHeight(int buildHeight) {
+        this.buildHeight = buildHeight;
     }
 
     public void startLavaRise() {
@@ -93,7 +98,7 @@ public class BlockRisingRunnable extends BukkitRunnable {
         ticksPerRise--;
         if (ticksPerRise <= 0) {
             ticksPerRise = originalTicks;
-            if (Y_LEVEL > lavaHeight) {
+            if (Y_LEVEL > blockHeight) {
                 cancel();
             } else {
                 bs.setTransformation(new Transformation(new Vector3f(-50, -65, -50), new AxisAngle4f(), new Vector3f(100, displaySize, 100), new AxisAngle4f()));

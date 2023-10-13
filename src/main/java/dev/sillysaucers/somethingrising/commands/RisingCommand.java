@@ -17,6 +17,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.function.Function;
 
+import static dev.sillysaucers.somethingrising.SomethingRising.config;
+
 public class RisingCommand {
 
     public static void init(SomethingRising plugin) {
@@ -82,7 +84,10 @@ public class RisingCommand {
                                                         }
                                                     }
                                                 }
-                                                SomethingRising.GAME.setFinalBorderTime(context.get("finalbordertime"));
+                                                config.set("final-border", context.get("finalbordertime"));
+                                                config.write();
+                                                config.forceReload();
+                                                SomethingRising.GAME.setFinalBorderTime(config.getInt("final-border"));
                                                 context.getSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "The final border time is now: " + context.get("finalbordertime") + " seconds!");
                                                 break;
                                             case ENDED:
@@ -110,7 +115,10 @@ public class RisingCommand {
                                                         }
                                                     }
                                                 }
-                                                SomethingRising.STARTER_PRE_EVENT.setWorldBorderRadius(context.get("borderradius"));
+                                                config.set("starter-border", context.get("borderradius"));
+                                                config.write();
+                                                config.forceReload();
+                                                SomethingRising.STARTER_PRE_EVENT.setWorldBorderRadius(config.getInt("starter-border"));
                                                 context.getSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "The starter border is now: " + context.get("borderradius") + "!");
                                                 break;
                                             case ENDED:
@@ -135,7 +143,10 @@ public class RisingCommand {
                                         }
                                     }
                                 }
-                                SomethingRising.GAME.setBlock(context.get("block"));
+                                config.set("block", context.get("block"));
+                                config.write();
+                                config.forceReload();
+                                SomethingRising.GAME.setBlock(Material.valueOf((String) config.get("block")));
                                 context.getSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD +  "The block used in the block rising is now: " + context.get("block") + "!");
                             })
             );
@@ -152,7 +163,10 @@ public class RisingCommand {
                                                     }
                                                 }
                                             }
-                                            SomethingRising.GAME.setTicksPerRise(context.get("time"));
+                                            config.set("ticks-per-rise", context.get("time"));
+                                            config.write();
+                                            config.forceReload();
+                                            SomethingRising.GAME.setTicksPerRise(config.getInt("ticks-per-rise"));
                                             context.getSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "The ticks per lava rise has been set to " + context.get("time") + "!");
                                         } else {
                                             context.getSender().sendMessage(ChatColor.RED + "That value is way too high! Are you trying to make your games last a million years?");
@@ -174,7 +188,10 @@ public class RisingCommand {
                                                 }
                                             }
                                         }
-                                        SomethingRising.BORDER_PRE_EVENT.setBorderClosingSeconds(context.get("closeSeconds"));
+                                        config.set("border-close-seconds", context.get("closeSeconds"));
+                                        config.write();
+                                        config.forceReload();
+                                        SomethingRising.BORDER_PRE_EVENT.setBorderClosingSeconds(config.getInt("border-close-seconds"));
                                         context.getSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "The seconds it takes for the border to close is now " + context.get("closeSeconds") + " seconds!");
                                         break;
                                     case ENDED:
@@ -201,7 +218,10 @@ public class RisingCommand {
                                                 }
                                             }
                                         }
-                                        SomethingRising.STARTER_PRE_EVENT.setTimeLeft(context.get("starterseconds"));
+                                        config.set("starter-period-length", context.get("starterseconds"));
+                                        config.write();
+                                        config.forceReload();
+                                        SomethingRising.STARTER_PRE_EVENT.setTimeLeft(config.getInt("starter-period-length"));
                                         context.getSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "The starter period will now last " + context.get("starterseconds") + " seconds!");
                                         break;
                                     case ENDED:
@@ -216,8 +236,8 @@ public class RisingCommand {
             );
 
             manager.command(
-                    RisingUtils.generateCommand(manager, "setlavaheight")
-                            .argument(IntegerArgument.builder("lavaheight"))
+                    RisingUtils.generateCommand(manager, "setblockheight")
+                            .argument(IntegerArgument.builder("blockheight"))
                             .handler(
                                     context -> {
                                         switch (SomethingRising.CURRENT_STATUS) {
@@ -225,12 +245,47 @@ public class RisingCommand {
                                                 for (Player pl : Bukkit.getOnlinePlayers()) {
                                                     if (context.getSender() instanceof Player) {
                                                         if (pl.hasPermission("something.rising.admin") && !pl.getName().equals(context.getSender().getName())) {
-                                                            pl.sendMessage(ChatColor.ITALIC + "" + ChatColor.GRAY + "[" + context.getSender().getName() + ": Set lava height to: " + context.get("lavaheight") + ".]");
+                                                            pl.sendMessage(ChatColor.ITALIC + "" + ChatColor.GRAY + "[" + context.getSender().getName() + ": Set block height to: " + context.get("blockheight") + ".]");
                                                         }
                                                     }
                                                 }
-                                                SomethingRising.GAME.setLavaHeightLimit(context.get("lavaheight"));
-                                                context.getSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "The lava height can now reach: " + context.get("lavaheight") + "!");
+                                                config.set("block-height", context.get("blockheight"));
+                                                config.write();
+                                                config.forceReload();
+                                                SomethingRising.GAME.setBlockHeightLimit(config.getInt("block-height"));
+                                                context.getSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "The block height can now reach: " + context.get("blockheight") + "!");
+                                                break;
+                                            case ENDED:
+                                            case ACTIVE:
+                                            case BORDER:
+                                            case STARTER:
+                                                context.getSender().sendMessage(ChatColor.RED + "You can't change that now!");
+                                                break;
+                                        }
+
+                                    }
+                            )
+            );
+
+            manager.command(
+                    RisingUtils.generateCommand(manager, "setbuildheight")
+                            .argument(IntegerArgument.builder("buildheight"))
+                            .handler(
+                                    context -> {
+                                        switch (SomethingRising.CURRENT_STATUS) {
+                                            case LOBBY:
+                                                for (Player pl : Bukkit.getOnlinePlayers()) {
+                                                    if (context.getSender() instanceof Player) {
+                                                        if (pl.hasPermission("something.rising.admin") && !pl.getName().equals(context.getSender().getName())) {
+                                                            pl.sendMessage(ChatColor.GRAY +""+ChatColor.ITALIC + "[" + context.getSender().getName() + ": Set build height to: " + context.get("buildheight") + ".]");
+                                                        }
+                                                    }
+                                                }
+                                                config.set("build-height", context.get("buildheight"));
+                                                config.write();
+                                                config.forceReload();
+                                                SomethingRising.GAME.setBuildHeight(config.getInt("build-height"));
+                                                context.getSender().sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "The build height is now: " + context.get("buildheight") + "!");
                                                 break;
                                             case ENDED:
                                             case ACTIVE:

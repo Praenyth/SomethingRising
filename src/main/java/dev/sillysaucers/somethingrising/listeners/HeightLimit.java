@@ -9,7 +9,7 @@ public class HeightLimit implements Listener {
 
     @EventHandler
     public void onBlockOnBuildHeight(BlockPlaceEvent event) {
-        if (event.getBlockPlaced().getLocation().getY() > SomethingRising.GAME.lavaHeight + 1) {
+        if (event.getBlockPlaced().getLocation().getY() > SomethingRising.GAME.buildHeight) {
 
             event.setCancelled(true);
 

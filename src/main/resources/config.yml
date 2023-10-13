@@ -1,0 +1,26 @@
+# SomethingRising Config! Woah.
+# When you've finished, do "/rising reload" in game or in the console.
+
+# The block you want to rise up from deep below.
+block: LAVA_CAULDRON
+
+# The delay between every time the block rises up
+ticks-per-rise: 40
+
+# The height limit you want your players to be able to build up to
+build-height: 319
+
+# The height you want the block to rise up to
+block-height: 318
+
+# The width of the initial border
+starter-border: 500
+
+# The length of the starter/grace period (in seconds)
+starter-period-length: 600
+
+# The speed at which the border closes in to 100x100 (in seconds)
+border-close-seconds: 300
+
+# The length at which the final border closes to 10x10
+final-border: 600
